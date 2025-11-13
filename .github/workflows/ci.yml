@@ -1,46 +1,25 @@
-<<<<<<< HEAD
 name: CI - Build & Push Docker to ECR (DroolsEngine)
 
 on:
   push:
     branches: [ "main" ]
-=======
-name: CI - Build & Push DroolsEngine to ECR
-
-on:
-  push:
-    branches: [ main ]
->>>>>>> 019df61 (ci: add AWS ECR build & push workflow)
   workflow_dispatch:
 
 permissions:
   contents: read
-<<<<<<< HEAD
 
 env:
   AWS_REGION: ap-south-1
   ACCOUNT_ID: 328705154792
   ECR_REPO: mtech-mid-droolsengine
   IMAGE_TAG: latest
-=======
-  id-token: write
-
-env:
-  ACCOUNT_ID: 328705154792
-  REGION: ap-south-1
-  IMAGE_REPO: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.REGION }}.amazonaws.com/mtech-mid-droolsengine
->>>>>>> 019df61 (ci: add AWS ECR build & push workflow)
 
 jobs:
   build-and-push:
     runs-on: ubuntu-latest
 
     steps:
-<<<<<<< HEAD
       - name: Checkout repo
-=======
-      - name: Checkout source
->>>>>>> 019df61 (ci: add AWS ECR build & push workflow)
         uses: actions/checkout@v4
 
       - name: Configure AWS credentials
@@ -48,7 +27,6 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-<<<<<<< HEAD
           aws-region: ${{ env.AWS_REGION }}
 
       - name: Login to Amazon ECR
@@ -62,20 +40,3 @@ jobs:
           push: true
           tags: ${{ env.ACCOUNT_ID }}.dkr.ecr.${{ env.AWS_REGION }}.amazonaws.com/${{ env.ECR_REPO }}:${{ env.IMAGE_TAG }}
           file: ./Dockerfile
-=======
-          aws-region: ${{ secrets.AWS_REGION }}
-
-      - name: Verify credentials
-        run: aws sts get-caller-identity
-
-      - name: Login to ECR
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: Build Docker image
-        run: |
-          docker build -t mtech-mid-droolsengine:latest .
-          docker tag mtech-mid-droolsengine:latest ${{ env.IMAGE_REPO }}:latest
-
-      - name: Push to ECR
-        run: docker push ${{ env.IMAGE_REPO }}:latest
->>>>>>> 019df61 (ci: add AWS ECR build & push workflow)
